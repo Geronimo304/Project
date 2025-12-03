@@ -8,15 +8,44 @@ class Review(BaseModel):
         self.place = place
         self.user = user
 
-    def verify(self):
-        if not self.text or not isinstance(self.text, str):
-            raise ValueError("The text is required and must contain only characters")
+    @property
+    def text(self):
+        return self._test
 
-        if not isinstance(self.rating, int) or not (1 <= self.rating <= 5):
+    @text.setter
+    def text(self, value):
+        if not isinstance(value, str):
+            raise TypeError("The text is required and must contain only characters")
+        self._text = value
+    
+    @property
+    def rating(self):
+        return self._rating
+    
+    @rating.setter
+    def rating(self, value):
+        if not isinstance(value, int)
+            raise TypeError("The rating must be an int")
+        if not (1 <= value <= 5):
             raise ValueError("Rating must be an integer between 1 and 5")
+        self._rating = value
 
-        if not self.place or not isinstance(self.place, str):
-            raise ValueError("The place is required and must contain only characters")
+    @property
+    def place(self):
+        return self._place
+    
+    @place.setter
+    def place(self, value)
+        if not isinstance(value, str):
+            raise TypeError("The place is required and must contain only characters")
+        self._place = value
+    
+    @property
+    def user(self):
+        return self._user
 
-        if not self.user or not isinstance(self.user, str):
-            raise ValueError("User is required and must contain characters")
+    @user.setter
+    def user(self, value)
+        if not self.user or not isinstance(value, str):
+            raise TypeError("User is required and must contain characters")
+        self._user = value

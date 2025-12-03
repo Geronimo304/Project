@@ -7,25 +7,55 @@ class User(BaseModel):
         self.last_name = last_name
         self.email = email
         self.is_admin = is_admin
-
-    def verify(self,):
-        if not self.first_name or isinstance(self.first_name, str):
-            raise ValueError("name is required")
-        if len(self.first_name) > 50:
+    
+    
+    @property
+    def first_name(self):
+        return self._first_name
+    
+    @first_name.setter
+    def first_name(self, value):
+        if not isinstance(value, str):
+            raise TypeError("The name must be a string")
+        if len(value) > 50:
             raise ValueError("Your name must be less than 50 characters")
-        
-        if not self.last_name or isinstance(self.last_name, str):
-            raise ValueError("last name is required")
-        if len(self.last_name) > 50:
-            raise ValueError("Your last name must be less than 50 characters")
+        self._first_name = value
 
-        if not self.email:
+
+    @property
+    def last_name(self):
+        return self._last_name
+
+    @last_name.setter
+    def last_name(self, value):
+        if not isinstance(value, str):
+            raise TypeError("The last name must be a string")
+        if len(value) > 50:
+            raise ValueError("Your last name must be less than 50 characters")
+        self._last_name = value
+
+
+    @property
+    def email(self):
+        return self._email
+    
+    @email.setter
+    def email(self, value):
+        if not value
             raise ValueError("email is required")
-        if "@" not in self.email or "." not in self.email:
+        if "@" not value:
             raise ValueError("Invalid email format")
-        
-        if not isinstance(self.is_admin, bool):
-            raise ValueError("is_admin must be a boolean value")
+        self._email = value
+
+
+    @property
+    def is_admin(self):
+        return self._is_admin
+
+    @is_admin.setter
+    def is_admin(self, value): 
+        if not isinstance(value, bool):
+            raise TypeError("is_admin must be a boolean value")
 
     def update(self, data):  #cambio
         if 'first_name' in data:
