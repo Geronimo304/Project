@@ -41,9 +41,9 @@ class User(BaseModel):
     
     @email.setter
     def email(self, value):
-        if not value
+        if not value:
             raise ValueError("email is required")
-        if "@" not value:
+        if "@" not in value:
             raise ValueError("Invalid email format")
         self._email = value
 
