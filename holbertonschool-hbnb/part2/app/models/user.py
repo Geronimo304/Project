@@ -41,9 +41,9 @@ class User(BaseModel):
     
     @email.setter
     def email(self, value):
-        if not value
+        if not value:
             raise ValueError("email is required")
-        if "@" not value:
+        if "@" not in value:
             raise ValueError("Invalid email format")
         self._email = value
 
@@ -57,7 +57,7 @@ class User(BaseModel):
         if not isinstance(value, bool):
             raise TypeError("is_admin must be a boolean value")
 
-    def update(self, data):  #cambio
+    def update(self, data):
         if 'first_name' in data:
             self.first_name = data['first_name']
         if 'last_name' in data:
