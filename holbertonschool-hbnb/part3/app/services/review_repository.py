@@ -1,0 +1,21 @@
+from app.persistence.repository import SQLAlchemyRepository
+from app.models.review import Review
+
+
+class ReviewRepository(SQLAlchemyRepository):
+    """Review-specific repository extending SQLAlchemyRepository"""
+    
+    def __init__(self):
+        super().__init__(Review)
+
+    def get_reviews_by_place(self, place_id):
+        """Retrieve all reviews for a specific place"""
+        return self.model.query.filter_by(place_id=place_id).all()
+
+    def get_reviews_by_user(self, user_id):
+        """Retrieve all reviews written by a specific user"""
+        return self.model.query.filter_by(user_id=user_id).all()
+
+    def get_review_by_place_and_user(self, place_id, user_id):
+        """Check if a user has already reviewed a place"""
+        return self.model.query.filter_by(place_id=place_id, user_id=user_id).first()
