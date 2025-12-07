@@ -10,7 +10,7 @@ class Review(BaseModel):
 
     @property
     def text(self):
-        return self._test
+        return self._text
 
     @text.setter
     def text(self, value):
@@ -24,7 +24,7 @@ class Review(BaseModel):
     
     @rating.setter
     def rating(self, value):
-        if not isinstance(value, int)
+        if not isinstance(value, int):
             raise TypeError("The rating must be an int")
         if not (1 <= value <= 5):
             raise ValueError("Rating must be an integer between 1 and 5")
@@ -35,7 +35,7 @@ class Review(BaseModel):
         return self._place
     
     @place.setter
-    def place(self, value)
+    def place(self, value):
         if not isinstance(value, str):
             raise TypeError("The place is required and must contain only characters")
         self._place = value
@@ -45,7 +45,7 @@ class Review(BaseModel):
         return self._user
 
     @user.setter
-    def user(self, value)
-        if not self.user or not isinstance(value, str):
+    def user(self, value):
+        if not value or not isinstance(value, str):
             raise TypeError("User is required and must contain characters")
         self._user = value
