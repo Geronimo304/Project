@@ -1,6 +1,6 @@
+from app import db
 import uuid
 from datetime import datetime
-from app import db
 
 
 class BaseModel(db.Model):
@@ -11,11 +11,16 @@ class BaseModel(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def save(self):
+        """Update timestamps and commit - simple student approach."""
         self.updated_at = datetime.utcnow()
-        db.session.commit()
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
 
     def update(self, data):
         for key, value in data.items():
-            if hasattr(self, key) and key not in ['id', 'created_at', 'updated_at']:
+            if hasattr(self, key):
                 setattr(self, key, value)
         self.save()

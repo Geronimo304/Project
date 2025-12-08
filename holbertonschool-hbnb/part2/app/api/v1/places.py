@@ -3,7 +3,7 @@ from app.services import facade
 
 api = Namespace('places', description='Place operations')
 
-# Define the models for related entities
+                                        
 amenity_model = api.model('PlaceAmenity', {
     'id': fields.String(description='Amenity ID'),
     'name': fields.String(description='Name of the amenity')
@@ -16,7 +16,7 @@ user_model = api.model('PlaceUser', {
     'email': fields.String(description='Email of the owner')
 })
 
-# Define the place model for input validation and documentation
+                                                               
 place_model = api.model('Place', {
     'title': fields.String(required=True, description='Title of the place'),
     'description': fields.String(description='Description of the place'),
@@ -38,7 +38,7 @@ class PlaceList(Resource):
         place_data = api.payload
 
         try:
-            # Create the place using the facade
+                                               
             new_place = facade.create_place(place_data)
             
             return {
@@ -81,7 +81,7 @@ class PlaceResource(Resource):
         if not place:
             return {'error': 'Place not found'}, 404
         
-        # Get owner details
+                           
         owner = facade.get_user(place.owner_id)
         owner_data = {
             'id': owner.id,
@@ -90,7 +90,7 @@ class PlaceResource(Resource):
             'email': owner.email
         } if owner else None
         
-        # Get amenities details
+                               
         amenities_data = []
         for amenity_id in place.amenities:
             amenity = facade.get_amenity(amenity_id)
@@ -133,3 +133,17 @@ class PlaceResource(Resource):
             return {'error': str(e)}, 400
         except Exception as e:
             return {'error': 'Invalid input data'}, 400
+
+
+@api.route('/<place_id>/reviews')
+class PlaceReviewList(Resource):
+    @api.response(200, 'List of reviews for the place retrieved successfully')
+    @api.response(404, 'Place not found')
+    def get(self, place_id):
+        """Get all reviews for a specific place"""
+        place = facade.get_place(place_id)
+        if not place:
+            return {'error': 'Place not found'}, 404
+        
+        reviews = facade.get_reviews_by_place(place_id)
+        return [{'id': review.id, 'text': review.text, 'rating': review.rating} for review in reviews], 200

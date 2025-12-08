@@ -4,21 +4,26 @@ from app.services import facade
 
 api = Namespace('amenities', description='Operaciones de amenidades')
 
+                                                                         
 amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Nombre de la amenidad')
-})@api.route('/')
+})
+
+@api.route('/')
 class AmenityList(Resource):
-    @jwt_required()
     @api.expect(amenity_model, validate=True)
     @api.response(201, 'Amenidad creada exitosamente')
-    @api.response(403, 'Admin privileges required')
     @api.response(400, 'Datos de entrada inválidos')
+    @api.response(403, 'Admin privileges required')
+    @jwt_required()
     def post(self):
-        """Registrar una nueva amenidad (admin only)"""
-        current_user = get_jwt()
-        if not current_user.get('is_admin', False):
+        """Registrar una nueva amenidad - requires admin"""
+        jwt_data = get_jwt()
+        is_admin = jwt_data.get('is_admin', False)
+        
+        if not is_admin:
             return {'error': 'Admin privileges required'}, 403
-
+        
         amenity_data = api.payload
         
         try:
@@ -32,7 +37,7 @@ class AmenityList(Resource):
 
     @api.response(200, 'Lista de amenidades obtenida exitosamente')
     def get(self):
-        """Obtener una lista de todas las amenidades (public)"""
+        """Obtener una lista de todas las amenidades - public endpoint"""
         amenities = facade.get_all_amenities()
         return [
             {
@@ -46,7 +51,7 @@ class AmenityResource(Resource):
     @api.response(200, 'Detalles de amenidad obtenidos exitosamente')
     @api.response(404, 'Amenidad no encontrada')
     def get(self, amenity_id):
-        """Obtener detalles de amenidad por ID (public)"""
+        """Obtener detalles de amenidad por ID - public endpoint"""
         amenity = facade.get_amenity(amenity_id)
         if not amenity:
             return {'error': 'Amenidad no encontrada'}, 404
@@ -56,18 +61,20 @@ class AmenityResource(Resource):
             'name': amenity.name
         }, 200
 
-    @jwt_required()
     @api.expect(amenity_model, validate=True)
     @api.response(200, 'Amenidad actualizada exitosamente')
     @api.response(404, 'Amenidad no encontrada')
-    @api.response(403, 'Admin privileges required')
     @api.response(400, 'Datos de entrada inválidos')
+    @api.response(403, 'Admin privileges required')
+    @jwt_required()
     def put(self, amenity_id):
-        """Actualizar la información de una amenidad (admin only)"""
-        current_user = get_jwt()
-        if not current_user.get('is_admin', False):
+        """Actualizar la información de una amenidad - requires admin"""
+        jwt_data = get_jwt()
+        is_admin = jwt_data.get('is_admin', False)
+        
+        if not is_admin:
             return {'error': 'Admin privileges required'}, 403
-
+        
         amenity_data = api.payload
         
         try:
