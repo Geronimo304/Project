@@ -4,12 +4,9 @@ from app.services import facade
 
 api = Namespace('amenities', description='Operaciones de amenidades')
 
-# Define el modelo de amenidad para validación de entrada y documentación
 amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Nombre de la amenidad')
-})
-
-@api.route('/')
+})@api.route('/')
 class AmenityList(Resource):
     @jwt_required()
     @api.expect(amenity_model, validate=True)

@@ -3,7 +3,6 @@ from app import db
 
 
 class Review(BaseModel):
-    """Review model mapped to SQLAlchemy"""
     __tablename__ = 'reviews'
 
     text = db.Column(db.Text, nullable=False)

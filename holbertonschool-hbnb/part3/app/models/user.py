@@ -3,7 +3,6 @@ from app import bcrypt, db
 
 
 class User(BaseModel):
-    """User model mapped to SQLAlchemy"""
     __tablename__ = 'users'
 
     first_name = db.Column(db.String(50), nullable=False)
@@ -12,7 +11,6 @@ class User(BaseModel):
     password = db.Column(db.String(255), nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
 
-    # Relationships (defined after all columns)
     places = db.relationship('Place', backref='owner', lazy=True, foreign_keys='Place.owner_id')
     reviews = db.relationship('Review', backref='user', lazy=True, foreign_keys='Review.user_id')
 
@@ -57,15 +55,12 @@ class User(BaseModel):
             raise TypeError("is_admin must be a boolean value")
 
     def hash_password(self, password):
-        """Hashes the password before storing it."""
         if password is None:
             self.password = None
             return
-        # generate_password_hash returns bytes; decode to str for storage
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def verify_password(self, password):
-        """Verifies if the provided password matches the hashed password."""
         if not self.password:
             return False
         return bcrypt.check_password_hash(self.password, password)

@@ -5,7 +5,6 @@ from app.services import facade
 
 api = Namespace('users', description='Operaciones de usuarios')
 
-# Define el modelo de usuario para validación de entrada y documentación
 user_model = api.model('User', {
     'first_name': fields.String(required=True, description='Nombre del usuario'),
     'last_name': fields.String(required=True, description='Apellido del usuario'),

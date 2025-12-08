@@ -2,7 +2,6 @@ from app.models.Base_model import BaseModel
 from app import db
 
 
-# Association table for many-to-many relationship between Place and Amenity
 place_amenity = db.Table('place_amenity',
     db.Column('place_id', db.String(36), db.ForeignKey('places.id'), primary_key=True),
     db.Column('amenity_id', db.String(36), db.ForeignKey('amenities.id'), primary_key=True)
@@ -10,12 +9,10 @@ place_amenity = db.Table('place_amenity',
 
 
 class Amenity(BaseModel):
-    """Amenity model mapped to SQLAlchemy"""
     __tablename__ = 'amenities'
 
     name = db.Column(db.String(50), nullable=False, unique=True)
 
-    # Relationship to Place (many-to-many)
     places = db.relationship('Place', secondary=place_amenity, backref=db.backref('amenities', lazy=True))
 
     def __init__(self, name):

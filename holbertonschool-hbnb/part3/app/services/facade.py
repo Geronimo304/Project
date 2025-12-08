@@ -8,6 +8,7 @@ from app.models.place import Place
 from app.models.amenity import Amenity
 from app.models.review import Review
 
+
 class HBnBFacade:
     def __init__(self):
         self.user_repo = UserRepository()
@@ -15,7 +16,6 @@ class HBnBFacade:
         self.amenity_repo = AmenityRepository()
         self.review_repo = ReviewRepository()
 
-    # ===== USER METHODS =====
     def create_user(self, user_data):
         # Accepts an optional 'password' in user_data; hash it using the model helper
         password = None

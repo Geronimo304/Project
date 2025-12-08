@@ -3,7 +3,6 @@ from app import db
 
 
 class Place(BaseModel):
-    """Place model mapped to SQLAlchemy"""
     __tablename__ = 'places'
 
     title = db.Column(db.String(100), nullable=False)
