@@ -41,7 +41,6 @@ class PlaceList(Resource):
         current_user = get_jwt_identity()
         place_data = api.payload
         
-        # set owner_id to current user
         place_data['owner_id'] = current_user
 
         try:
@@ -133,7 +132,6 @@ class PlaceResource(Resource):
         if not place:
             return {'error': 'Place not found'}, 404
         
-        # check ownership or admin
         if place.owner_id != current_user and not is_admin:
             return {'error': 'Unauthorized action'}, 403
         

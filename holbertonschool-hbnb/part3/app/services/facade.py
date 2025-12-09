@@ -8,7 +8,6 @@ from app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
-        # use SQLAlchemy-backed repositories for all entities
         self.user_repo = UserRepository()
         self.place_repo = SQLAlchemyRepository(Place)
         self.amenity_repo = SQLAlchemyRepository(Amenity)
@@ -16,9 +15,7 @@ class HBnBFacade:
 
                               
     def create_user(self, user_data):
-        # expect user_data may contain 'password'
         password = user_data.pop('password', None)
-        # create SQLAlchemy User instance and persist
         user = User(**user_data, password=password)
         self.user_repo.add(user)
         return user
@@ -27,7 +24,6 @@ class HBnBFacade:
         return self.user_repo.get(user_id)
 
     def get_user_by_email(self, email):
-        # user_repo provides a specific method for email lookup
         try:
             return self.user_repo.get_user_by_email(email)
         except Exception:
@@ -40,9 +36,7 @@ class HBnBFacade:
         return self.user_repo.update(user_id, user_data)
 
                                
-    def create_place(self, place_data):
-        """Create a new place with validation"""
-                                        
+    def create_place(self, place_data):                                        
         owner_id = place_data.get('owner_id')
         owner = self.get_user(owner_id)
         if not owner:
@@ -71,15 +65,12 @@ class HBnBFacade:
         return place
 
     def get_place(self, place_id):
-        """Retrieve a place by ID"""
         return self.place_repo.get(place_id)
 
     def get_all_places(self):
-        """Retrieve all places"""
         return self.place_repo.get_all()
 
     def update_place(self, place_id, place_data):
-        """Update a place's information"""
         place = self.get_place(place_id)
         if not place:
             return None
@@ -103,21 +94,17 @@ class HBnBFacade:
 
                                  
     def create_amenity(self, amenity_data):
-        """Create a new amenity"""
         amenity = Amenity(name=amenity_data['name'])
         self.amenity_repo.add(amenity)
         return amenity
 
     def get_amenity(self, amenity_id):
-        """Retrieve an amenity by ID"""
         return self.amenity_repo.get(amenity_id)
 
     def get_all_amenities(self):
-        """Retrieve all amenities"""
         return self.amenity_repo.get_all()
 
     def update_amenity(self, amenity_id, amenity_data):
-        """Update an amenity"""
         return self.amenity_repo.update(amenity_id, amenity_data)
 
     def create_review(self, review_data):

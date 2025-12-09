@@ -97,21 +97,17 @@ class Place(BaseModel):
         self._owner_id = value
         
     def add_review(self, review):
-        """Add a review to the place"""
         if review not in self.reviews:
             self.reviews.append(review)
     
     def delete_review(self, review):
-        """Remove a review from the place"""
         if review in self.reviews:
             self.reviews.remove(review)
     
     def add_amenity(self, amenity):
-        """Add an amenity to the place"""
         if amenity not in self.amenities:
             self.amenities.append(amenity)
 
     def delete_amenity(self, amenity):
-        """Remove an amenity from the place"""
         if amenity in self.amenities:
             self.amenities.remove(amenity)

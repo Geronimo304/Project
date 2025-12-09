@@ -66,11 +66,9 @@ class User(BaseModel):
         self._is_admin = value
 
     def hash_password(self, password):
-        """Hashes the password before storing it."""
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def verify_password(self, password):
-        """Verify the hashed password."""
         if not self.password:
             return False
         return bcrypt.check_password_hash(self.password, password)

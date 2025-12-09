@@ -24,7 +24,6 @@ class ReviewList(Resource):
         current_user = get_jwt_identity()
         data = api.payload
         
-        # get place and check ownership
         place = facade.get_place(data.get('place_id'))
         if not place:
             return {'error': 'Place not found'}, 400
@@ -32,13 +31,11 @@ class ReviewList(Resource):
         if place.owner_id == current_user:
             return {'error': 'You cannot review your own place'}, 400
         
-        # check if user already reviewed this place
         existing_reviews = facade.get_reviews_by_place(data.get('place_id'))
         for review in existing_reviews:
             if review.user_id == current_user:
                 return {'error': 'You have already reviewed this place'}, 400
         
-        # set user_id to current user
         data['user_id'] = current_user
         
         try:
@@ -84,7 +81,6 @@ class ReviewResource(Resource):
     @api.response(400, 'Invalid input data')
     @jwt_required()
     def put(self, review_id):
-        """Update a review - requires ownership or admin"""
         current_user = get_jwt_identity()
         jwt_data = get_jwt()
         is_admin = jwt_data.get('is_admin', False)
@@ -93,7 +89,6 @@ class ReviewResource(Resource):
         if not review:
             return {'error': 'Review not found'}, 404
         
-        # check ownership or admin
         if review.user_id != current_user and not is_admin:
             return {'error': 'Unauthorized action'}, 403
         
@@ -118,7 +113,6 @@ class ReviewResource(Resource):
         if not review:
             return {'error': 'Review not found'}, 404
         
-        # check ownership or admin
         if review.user_id != current_user and not is_admin:
             return {'error': 'Unauthorized action'}, 403
         

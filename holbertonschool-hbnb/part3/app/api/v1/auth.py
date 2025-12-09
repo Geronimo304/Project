@@ -4,7 +4,6 @@ from app.services import facade
 
 api = Namespace('auth', description='Authentication operations')
 
-# Model for input validation
 login_model = api.model('Login', {
     'email': fields.String(required=True, description='User email'),
     'password': fields.String(required=True, description='User password')
@@ -15,7 +14,6 @@ login_model = api.model('Login', {
 class Login(Resource):
     @api.expect(login_model)
     def post(self):
-        """Authenticate user and return a JWT token"""
         credentials = api.payload
 
         user = facade.get_user_by_email(credentials.get('email'))

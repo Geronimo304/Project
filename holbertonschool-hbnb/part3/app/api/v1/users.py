@@ -62,7 +62,6 @@ class UserResource(Resource):
     @api.response(400, 'You cannot modify email or password')
     @jwt_required()
     def put(self, user_id):         
-        """Actualizar usuario por ID - user can only modify own data; admin can modify any"""
         current_user = get_jwt_identity()
         jwt_data = get_jwt()
         is_admin = jwt_data.get('is_admin', False)
@@ -71,18 +70,15 @@ class UserResource(Resource):
         if not user:
             return {'error': 'Usuario no encontrado'}, 404
 
-        # check if user is updating own data or is admin
         if current_user != user_id and not is_admin:
             return {'error': 'Unauthorized action'}, 403
 
         user_data = api.payload
         
-        # regular users cannot modify email or password
         if not is_admin:
             if 'email' in user_data or 'password' in user_data:
                 return {'error': 'You cannot modify email or password'}, 400
         
-        # check email uniqueness if modified
         if 'email' in user_data and user_data['email'] != user.email:
             existing_user = facade.get_user_by_email(user_data['email'])
             if existing_user:

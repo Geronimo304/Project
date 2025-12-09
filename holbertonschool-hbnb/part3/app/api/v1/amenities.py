@@ -17,7 +17,6 @@ class AmenityList(Resource):
     @api.response(403, 'Admin privileges required')
     @jwt_required()
     def post(self):
-        """Registrar una nueva amenidad - requires admin"""
         jwt_data = get_jwt()
         is_admin = jwt_data.get('is_admin', False)
         
@@ -37,7 +36,6 @@ class AmenityList(Resource):
 
     @api.response(200, 'Lista de amenidades obtenida exitosamente')
     def get(self):
-        """Obtener una lista de todas las amenidades - public endpoint"""
         amenities = facade.get_all_amenities()
         return [
             {
@@ -51,7 +49,6 @@ class AmenityResource(Resource):
     @api.response(200, 'Detalles de amenidad obtenidos exitosamente')
     @api.response(404, 'Amenidad no encontrada')
     def get(self, amenity_id):
-        """Obtener detalles de amenidad por ID - public endpoint"""
         amenity = facade.get_amenity(amenity_id)
         if not amenity:
             return {'error': 'Amenidad no encontrada'}, 404
@@ -68,7 +65,6 @@ class AmenityResource(Resource):
     @api.response(403, 'Admin privileges required')
     @jwt_required()
     def put(self, amenity_id):
-        """Actualizar la información de una amenidad - requires admin"""
         jwt_data = get_jwt()
         is_admin = jwt_data.get('is_admin', False)
         

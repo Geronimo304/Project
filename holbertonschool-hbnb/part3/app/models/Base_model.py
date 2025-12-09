@@ -11,7 +11,6 @@ class BaseModel(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def save(self):
-        """Update timestamps and commit - simple student approach."""
         self.updated_at = datetime.utcnow()
         try:
             db.session.add(self)
